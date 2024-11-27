@@ -1,13 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: myapp-deployment
+  name: k-deployment
   namespace: githubrepo
   labels:
     app: myapp
 spec:
   replicas: 1
-  progressDeadlineSeconds: 1800
+  progressDeadlineSeconds: 1200 
   selector:
     matchLabels:
       app: myapp
@@ -17,13 +17,13 @@ spec:
         app: myapp
     spec:
       containers:
-        - name: myapp-container
+        - name: k-container
           image: nrt.ocir.io/nrcbpbtrtyz0/githubrepo:5.0
           ports:
-            - containerPort: 9000
+            - containerPort: 9000  
           env:
             - name: DEPLOYMENT_ENV
-              value: "DEV"
+              value: "DEV"  
             - name: IMAGE_CREATED_BY
               value: "OCIDevOps"
           resources:
@@ -58,13 +58,13 @@ metadata:
   namespace: githubrepo
 spec:
   rules:
-    - host: skiffy.mlhuillier.com
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: k-service
-                port:
-                  number: 80
+  - host: skiffy.mlhuillier.com  
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: k-service  
+            port:
+              number: 80
