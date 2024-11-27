@@ -23,7 +23,7 @@ spec:
             - containerPort: 9000  
           env:
             - name: DEPLOYMENT_ENV
-              value: "github_environment"  
+              value: "DEV"  
             - name: IMAGE_CREATED_BY
               value: "OCIDevOps"
       imagePullSecrets:
