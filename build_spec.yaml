@@ -32,6 +32,6 @@ steps:
           docker build -t ${DOCKER_TAG} .
 
 outputArtifacts:
-  - name: githubrepo
+  - name: myapp-image
     type: DOCKER_IMAGE
     location: ${DOCKER_TAG}
