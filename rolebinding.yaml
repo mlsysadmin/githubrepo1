@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: ingress-editor-binding
+  namespace: githubrepo
+subjects:
+- kind: User
+  name: "ocid1.devopsdeploypipeline.oc1.ap-tokyo-1.amaaaaaa46pqqoyaqncurc7mv2ylpfbwndcbp7omlprazqvp2ufrboi7m33a"  
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: ingress-editor
+  apiGroup: rbac.authorization.k8s.io

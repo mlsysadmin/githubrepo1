@@ -27,4 +27,37 @@ spec:
             - name: IMAGE_CREATED_BY
               value: "OCIDevOps"
       imagePullSecrets:
-        - name: ocir-auth  
+        - name: ocir-auth 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: k-service
+  namespace: githubrepo
+  labels:
+    app: myapp
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 9000
+  selector:
+    app: myapp
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: k-ingress
+  namespace: githubrepo
+spec:
+  rules:
+  - host: skiffy.mlhuillier.com  
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: k-service  
+            port:
+              number: 80  
