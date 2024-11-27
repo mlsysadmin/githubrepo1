@@ -27,7 +27,7 @@ spec:
             - name: IMAGE_CREATED_BY
               value: "OCIDevOps"
       imagePullSecrets:
-        - name: ocir-auth 
+        - name: brokerage-secret
 ---
 apiVersion: v1
 kind: Service
