@@ -7,7 +7,7 @@ metadata:
     app: myapp
 spec:
   replicas: 1
-  progressDeadlineSeconds: 1200
+  progressDeadlineSeconds: 1800
   selector:
     matchLabels:
       app: myapp
@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: myapp-container
-          image: nrt.ocir.io/nrcbpbtrtyz0/githubrepo:1.3
+          image: nrt.ocir.io/nrcbpbtrtyz0/githubrepo:5.0
           ports:
             - containerPort: 9000
           env:
@@ -26,8 +26,15 @@ spec:
               value: "DEV"
             - name: IMAGE_CREATED_BY
               value: "OCIDevOps"
+          resources:
+            requests:
+              memory: "2Gi"
+              cpu: "1"
+            limits:
+              memory: "2Gi"
+              cpu: "1"
       imagePullSecrets:
-        - name: brokerage-secret
+        - name: ocir-auth
 ---
 apiVersion: v1
 kind: Service
@@ -51,13 +58,13 @@ metadata:
   namespace: githubrepo
 spec:
   rules:
-  - host: skiffy.mlhuillier.com  
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: k-service  
-            port:
-              number: 80  
+    - host: skiffy.mlhuillier.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: k-service
+                port:
+                  number: 80
