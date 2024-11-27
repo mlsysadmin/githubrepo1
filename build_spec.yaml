@@ -5,33 +5,32 @@ runAs: root
 shell: bash
 env:
   variables:
-    DEPLOYMENT_DIRECTORY: "${OCI_WORKSPACE_DIR}/deployment/${DEPLOYMENT_ENV}"
-    DOCKER_TAG: "nrt.ocir.io/nrcbpbtrtyz0/githubrepo:1.3"
-  
-  exportedVariables:
-    - BUILDRUN_HASH    
+    key: "value"
 
+  exportedVariables:
+    - BUILDRUN_HASH
 steps:
+  - type: Command
+    name: "Define Tagging"
+    timeoutInSeconds: 60
+    command: |
+          export BUILDRUN_HASH=$(echo ${OCI_BUILD_RUN_ID} | rev | cut -c 1-7)
+          echo "BUILDRUN_HASH: " $BUILDRUN_HASH
+
+    onFailure:
+      - type: Command
+        command: |
+          echo "Handling Failure"
+          echo "Failure successfully handled"
+        timeoutInSeconds: 1200
+        runAs: root
 
   - type: Command
     name: "Build container image"
-    timeoutInSeconds: 3000
+    timeoutInSeconds: 
     command: |
-          export DEPLOYMENT_TIMEOUT="120s"
-          export BUILDRUN_HASH=`echo ${OCI_BUILD_RUN_ID} | rev | cut -c 1-7`
-          echo "BUILDRUN_HASH: " $BUILDRUN_HASH
-
-          export REGISTRY="nrt.ocir.io/nrcbpbtrtyz0/githubrepo"
-          export PROJECT_NAME="myapp-deployment"
-          export DEPLOYMENT_ENV="DEV"
-          export IMAGE_CREATED_BY="OCIDevOps"
-          export GIT_TAG="$(git describe --tags)"
-          export DEPLOYMENT_DIRECTORY="${OCI_WORKSPACE_DIR}/deployment/${DEPLOYMENT_ENV}"
-          export DOCKER_TAG="${REGISTRY}/${PROJECT_NAME}:${IMAGE_VERSION}"
-
-          docker build -t ${DOCKER_TAG} .
-
+          docker build --pull --rm -t githubrepo .
 outputArtifacts:
   - name: myapp-image
     type: DOCKER_IMAGE
-    location: ${DOCKER_TAG}
+    location: githubrepo:latest
